@@ -65,6 +65,13 @@
         document.body.classList.add('running');
         const headers = apiKey && apiKey.length > 0 ? { Authorization: 'Bearer ' + apiKey } : {};
         const response = await fetch(`https://lichess.org/api/team/${teamId}/users`, { headers });
+        if (!response.ok) {
+            results.textContent = "Request failed: " + response.status + " " + response.statusText;
+            if (response.status == 404) results.textContent += "\nMost likely you mistyped the team ID or the team doesn't exist";
+            if (response.status == 401) results.textContent += "\nMost likely you are not authorized to view this team's members. Enter an API key with team:read permissions above.";
+            document.body.classList.remove('running');
+            return;
+        }
         const reader = response.body.pipeThrough(new TextDecoderStream()).getReader();
         const results = document.getElementById('results');
         results.textContent = '';
