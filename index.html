@@ -56,9 +56,13 @@
     <pre id="results"></pre>
     <script>
       async function run() {
-        document.body.classList.add('running');
-        const teamId = document.getElementById('team-id').value;
+        const teamId = document.getElementById('team-id').value?.trim();
+        if (!teamId || teamId.length < 2) {
+            results.textContent = "Enter a valid team ID";
+            return;
+        }
         const apiKey = document.getElementById('api-key').value?.trim();
+        document.body.classList.add('running');
         const headers = apiKey && apiKey.length > 0 ? { Authorization: 'Bearer ' + apiKey } : {};
         const response = await fetch(`https://lichess.org/api/team/${teamId}/users`, { headers });
         const reader = response.body.pipeThrough(new TextDecoderStream()).getReader();
