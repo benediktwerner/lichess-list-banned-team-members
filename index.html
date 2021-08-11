@@ -56,6 +56,7 @@
     <pre id="results"></pre>
     <script>
       async function run() {
+        const results = document.getElementById('results');
         const teamId = document.getElementById('team-id').value?.trim();
         if (!teamId || teamId.length < 2) {
             results.textContent = "Enter a valid team ID";
@@ -73,7 +74,6 @@
             return;
         }
         const reader = response.body.pipeThrough(new TextDecoderStream()).getReader();
-        const results = document.getElementById('results');
         results.textContent = '';
         let stream = '';
         while (true) {
