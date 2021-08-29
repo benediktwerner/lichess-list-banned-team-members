@@ -73,12 +73,14 @@
             document.body.classList.remove('running');
             return;
         }
-        const reader = response.body.pipeThrough(new TextDecoderStream()).getReader();
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
         results.textContent = '';
         let stream = '';
         while (true) {
           let { value, done } = await reader.read();
           if (done) break;
+          value = decoder.decode(value, { stream: true });
           while (value.length > 0) {
             const newline = value.indexOf('\n');
             if (newline >= 0) {
