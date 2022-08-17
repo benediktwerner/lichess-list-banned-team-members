@@ -54,12 +54,18 @@
   </head>
   <body>
     <h2>Lichess: List closed/banned team members</h2>
-    <label for="team-id">Team ID:</label><input id="team-id" /><br />
-    <label for="api-key"
-      >API key (with
+    <label for="team-id">Team ID:</label>
+    <input id="team-id" /><br />
+    <label for="api-key">
+      API key (with
       <code>team:read</code>
-      permission, only required if team members are hidden):</label
-    ><input id="api-key" /><br />
+      permission, only required if team members are hidden, can be generated
+      <a
+        href="https://lichess.org/account/oauth/token/create?scopes[]=team:read"
+        >here</a
+      >):
+    </label>
+    <input id="api-key" /><br />
     <button id="run" type="button">Run</button>
     <h3>Results <span class="spinner"></span></h3>
     <pre id="results"></pre>
