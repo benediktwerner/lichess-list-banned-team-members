@@ -71,9 +71,9 @@
       show if members are closed/banned: 
       <input id="show-banned" type="checkbox" checked />
     </label>
-    <label for="show-banned">
+    <label for="only-banned">
       Only show closed/banned members: 
-      <input id="show-banned" type="checkbox" checked />
+      <input id="only-banned" type="checkbox" checked />
     </label>
     <div><button id="run" type="button">Run</button></div>
     <h3>Results <span class="spinner"></span></h3>
@@ -83,7 +83,7 @@
         const results = document.getElementById('results');
         const teamId = document.getElementById('team-id').value?.trim().toLowerCase();
         const showBanned = document.getElementById('show-banned').checked;
-        const onlyBanned = document.getElementById('show-banned').checked;
+        const onlyBanned = document.getElementById('only-banned').checked;
         if (!teamId || teamId.length < 2) {
           results.textContent = 'Enter a valid team ID';
           return;
