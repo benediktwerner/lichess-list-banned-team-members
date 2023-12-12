@@ -10,7 +10,7 @@
         font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica,
           Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
         color: #c9d1d9;
-        background-color: #0d1117;
+        background-color: #13305d;
       }
       a {
         color: #58a6ff;
@@ -55,7 +55,8 @@
   <body>
     <h2>Lichess: List closed/banned team members</h2>
     <label for="team-id">Team ID:</label>
-    <input id="team-id" /><br />
+    <!-- default to lichess-swiss -->
+    <input id="team-id" value="lichess-swiss" /><br />
     <label for="api-key">
       API key (with
       <code>team:read</code>
@@ -66,13 +67,23 @@
       >):
     </label>
     <input id="api-key" /><br />
-    <button id="run" type="button">Run</button>
+    <label for="show-banned">
+      show if members are closed/banned: 
+      <input id="show-banned" type="checkbox" checked />
+    </label>
+    <label for="only-banned">
+      Only show closed/banned members: 
+      <input id="only-banned" type="checkbox" checked />
+    </label>
+    <div><button id="run" type="button">Run</button></div>
     <h3>Results <span class="spinner"></span></h3>
     <pre id="results"></pre>
     <script>
       async function run() {
         const results = document.getElementById('results');
-        const teamId = document.getElementById('team-id').value?.trim();
+        const teamId = document.getElementById('team-id').value?.trim().toLowerCase();
+        const showBanned = document.getElementById('show-banned').checked;
+        const onlyBanned = document.getElementById('only-banned').checked;
         if (!teamId || teamId.length < 2) {
           results.textContent = 'Enter a valid team ID';
           return;
@@ -113,12 +124,14 @@
               stream += value.substring(0, newline);
               value = value.substring(newline + 1);
               const user = JSON.parse(stream);
-              if (user.disabled)
-                results.textContent +=
-                  user.username.padEnd(30, ' ') + 'Closed\n';
-              if (user.tosViolation)
-                results.textContent +=
-                  user.username.padEnd(30, ' ') + 'ToS violation\n';
+              if (!onlyBanned || user.disabled || user.tosViolation) {
+                results.textContent += user.username.padEnd(30, ' ')
+                if (showBanned) {
+                  results.textContent += (user.disabled ? 'Closed' : '') +
+                  (user.tosViolation ? 'ToS violation' : '')
+                }
+                results.textContent += '\n';
+              }
               stream = '';
             } else {
               stream += value;
